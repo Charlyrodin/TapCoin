@@ -95,7 +95,12 @@
         <div id="upgrade-screen">
             <h2>Upgrades</h2>
             <div class="screen-content">
-                <p>Coming soon...</p>
+                <p><strong>Upgrade 1:</strong> Increase tap score to 10 points (Cost: 1000)</p>
+                <button class="menu-button" onclick="buyUpgrade(1)">Buy</button>
+                <p><strong>Upgrade 2:</strong> Increase tap score to 50 points (Cost: 5000)</p>
+                <button class="menu-button" onclick="buyUpgrade(2)">Buy</button>
+                <p><strong>Upgrade 3:</strong> Increase tap score to 100 points (Cost: 10000)</p>
+                <button class="menu-button" onclick="buyUpgrade(3)">Buy</button>
                 <button class="menu-button" onclick="hideScreen('upgrade-screen')">Back</button>
             </div>
         </div>
@@ -110,6 +115,7 @@
 
     <script>
         let score = 0;
+        let tapScore = 5;
         const scoreDisplay = document.getElementById('score');
         const coin = document.getElementById('coin');
 
@@ -119,7 +125,7 @@
         }
 
         coin.addEventListener('click', () => {
-            score += 5;
+            score += tapScore;
             scoreDisplay.textContent = formatScore(score);
             coin.style.transform = 'translate(-50%, -50%) scale(0.9)';
             setTimeout(() => {
@@ -133,6 +139,31 @@
 
         function hideScreen(screenId) {
             document.getElementById(screenId).style.display = 'none';
+        }
+
+        function buyUpgrade(upgradeLevel) {
+            let cost;
+            let newTapScore;
+
+            if (upgradeLevel === 1) {
+                cost = 1000;
+                newTapScore = 10;
+            } else if (upgradeLevel === 2) {
+                cost = 5000;
+                newTapScore = 50;
+            } else if (upgradeLevel === 3) {
+                cost = 10000;
+                newTapScore = 100;
+            }
+
+            if (score >= cost) {
+                score -= cost;
+                tapScore = newTapScore;
+                scoreDisplay.textContent = formatScore(score);
+                alert(`Upgrade purchased! Tap score is now ${tapScore} points.`);
+            } else {
+                alert('Not enough points to buy this upgrade!');
+            }
         }
     </script>
 </body>
