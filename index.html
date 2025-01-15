@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coin Tap Game</title>
+    <title>Coin Tap Game - MLM System</title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
         body {
@@ -27,99 +27,88 @@
             background-position: center;
             border: 5px solid #00ff00;
             border-radius: 20px;
+            padding: 20px;
+            box-sizing: border-box;
         }
-        #coin {
-            width: 80px;
-            height: 80px;
-            background-image: url('https://i.postimg.cc/kMLh5644/coin.png');
-            background-size: cover;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            cursor: pointer;
+        #registration-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
-        #coin:active {
-            transform: translate(-50%, -50%) scale(0.9);
+        #registration-form input {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
         }
-        #score {
-            position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 24px;
-            color: #00ff00;
-        }
-        #multiplier {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 20px;
-            color: #ffcc00;
-        }
-        #tap-button {
+        #register-button {
             width: 100px;
             height: 40px;
             background-image: url('https://i.postimg.cc/K8D9Q05k/button.png');
             background-size: cover;
             border: none;
-            position: absolute;
-            bottom: 60px;
-            left: 50%;
-            transform: translateX(-50%);
             cursor: pointer;
+            margin-top: 10px;
+        }
+        #matrix-info {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #00ff00;
+            text-align: center;
         }
     </style>
 </head>
 <body>
     <div id="game-container">
-        <div id="coin"></div>
-        <div id="score">Score: 0</div>
-        <div id="multiplier">Multiplier: x1</div>
-        <button id="tap-button"></button>
+        <form id="registration-form">
+            <input type="text" id="username" placeholder="Enter your username" required>
+            <input type="text" id="referrer" placeholder="Referrer username (optional)">
+            <button id="register-button" type="button"></button>
+        </form>
+        <div id="matrix-info"></div>
     </div>
 
     <script>
-        let score = 0;
-        let multiplier = 1;
-        const coin = document.getElementById('coin');
-        const scoreDisplay = document.getElementById('score');
-        const multiplierDisplay = document.getElementById('multiplier');
-        const tapButton = document.getElementById('tap-button');
+        let users = {};
 
-        // Sound Effects
-        const clickSound = new Audio('https://example.com/click.mp3');
-        const bonusSound = new Audio('https://example.com/bonus.mp3');
+        // Registration Logic
+        document.getElementById('register-button').addEventListener('click', () => {
+            const username = document.getElementById('username').value.trim();
+            const referrer = document.getElementById('referrer').value.trim();
 
-        // Coin Click Event
-        coin.addEventListener('click', () => {
-            clickSound.play();
-            score += multiplier;
-            scoreDisplay.textContent = `Score: ${score}`;
-
-            // Random Bonus
-            if (Math.random() < 0.1) {
-                multiplier++;
-                bonusSound.play();
-                multiplierDisplay.textContent = `Multiplier: x${multiplier}`;
+            if (!username) {
+                alert('Please enter a username.');
+                return;
             }
+
+            if (users[username]) {
+                alert('Username already taken.');
+                return;
+            }
+
+            // Create new user
+            users[username] = {
+                referrer: referrer || null,
+                level: referrer ? users[referrer].level + 1 : 1
+            };
+
+            if (referrer && users[referrer]) {
+                addReferral(referrer, username);
+            }
+
+            document.getElementById('matrix-info').innerHTML = `Welcome ${username}!<br>Referrer: ${referrer || 'None'}<br>Level: ${users[username].level}`;
+            document.getElementById('registration-form').style.display = 'none';
         });
 
-        // Button Tap Event
-        tapButton.addEventListener('click', () => {
-            clickSound.play();
-            score += multiplier;
-            scoreDisplay.textContent = `Score: ${score}`;
-        });
-
-        // Vibration on Tap (Mobile Only)
-        function vibrate() {
-            if (navigator.vibrate) {
-                navigator.vibrate(100);
+        // Add referral to referrer
+        function addReferral(referrer, newUser) {
+            if (!users[referrer].referrals) {
+                users[referrer].referrals = [];
             }
+            users[referrer].referrals.push(newUser);
         }
-        coin.addEventListener('click', vibrate);
     </script>
 </body>
 </html>
