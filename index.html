@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coin Tap Game - MLM System</title>
+    <title>Emerald Tap Game</title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
         body {
             margin: 0;
             padding: 0;
-            background-color: #1a1a1a;
-            color: #fff;
+            background-image: url('https://i.postimg.cc/wvFPjgvk/Fondo-pantalla-juego.png');
+            background-size: cover;
+            background-position: center;
             font-family: 'Press Start 2P', cursive;
             display: flex;
             justify-content: center;
@@ -22,18 +23,11 @@
             position: relative;
             width: 360px;
             height: 640px;
-            background-image: url('https://i.postimg.cc/wvFPjgvk/Fondo-pantalla-juego.png');
-            background-size: cover;
-            background-position: center;
-            border: 5px solid #00ff00;
-            border-radius: 20px;
-            padding: 20px;
-            box-sizing: border-box;
         }
         #coin {
-            width: 80px;
-            height: 80px;
-            background-image: url('https://i.postimg.cc/kMLh5644/coin.png');
+            width: 100px;
+            height: 100px;
+            background-image: url('https://i.postimg.cc/y8PrP7hC/moneda.png');
             background-size: cover;
             position: absolute;
             top: 50%;
@@ -41,138 +35,30 @@
             transform: translate(-50%, -50%);
             cursor: pointer;
         }
-        #coin:active {
-            transform: translate(-50%, -50%) scale(0.9);
-        }
         #score {
             position: absolute;
             top: 20px;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 24px;
-            color: #00ff00;
-        }
-        #multiplier-button {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 150px;
-            height: 50px;
-            background-image: url('https://i.postimg.cc/K8D9Q05k/button.png');
-            background-size: cover;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-            color: #fff;
-            text-align: center;
-            line-height: 50px;
-        }
-        #registration-form {
-            position: absolute;
-            top: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80%;
-            background-color: rgba(0, 0, 0, 0.8);
-            padding: 10px;
-            border-radius: 10px;
-        }
-        #registration-form input {
-            width: 100%;
-            padding: 10px;
-            margin: 5px 0;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-        #register-button {
-            width: 100%;
-            height: 40px;
-            background-image: url('https://i.postimg.cc/K8D9Q05k/button.png');
-            background-size: cover;
-            border: none;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-        #matrix-info {
-            margin-top: 10px;
-            font-size: 14px;
-            color: #00ff00;
-            text-align: center;
+            font-size: 32px;
+            color: #ffffff;
         }
     </style>
 </head>
 <body>
     <div id="game-container">
-        <form id="registration-form">
-            <input type="text" id="username" placeholder="Enter your username" required>
-            <input type="text" id="referrer" placeholder="Referrer username (optional)">
-            <button id="register-button" type="button"></button>
-        </form>
-        <div id="matrix-info"></div>
+        <div id="score">0</div>
         <div id="coin"></div>
-        <div id="score">Score: 0</div>
-        <button id="multiplier-button">Multiplier: x1</button>
     </div>
 
     <script>
-        let users = {};
         let score = 0;
-        let multiplier = 1;
-
-        // Registration Logic
-        document.getElementById('register-button').addEventListener('click', () => {
-            const username = document.getElementById('username').value.trim();
-            const referrer = document.getElementById('referrer').value.trim();
-
-            if (!username) {
-                alert('Please enter a username.');
-                return;
-            }
-
-            if (users[username]) {
-                alert('Username already taken.');
-                return;
-            }
-
-            // Create new user
-            users[username] = {
-                referrer: referrer || null,
-                level: referrer ? users[referrer].level + 1 : 1
-            };
-
-            if (referrer && users[referrer]) {
-                addReferral(referrer, username);
-            }
-
-            document.getElementById('matrix-info').innerHTML = `Welcome ${username}!<br>Referrer: ${referrer || 'None'}<br>Level: ${users[username].level}`;
-            document.getElementById('registration-form').style.display = 'none';
-        });
-
-        // Add referral to referrer
-        function addReferral(referrer, newUser) {
-            if (!users[referrer].referrals) {
-                users[referrer].referrals = [];
-            }
-            users[referrer].referrals.push(newUser);
-            multiplier++;
-            document.getElementById('multiplier-button').textContent = `Multiplier: x${multiplier}`;
-        }
-
-        // Coin Click Event
-        const coin = document.getElementById('coin');
         const scoreDisplay = document.getElementById('score');
-        const multiplierButton = document.getElementById('multiplier-button');
+        const coin = document.getElementById('coin');
 
         coin.addEventListener('click', () => {
-            score += multiplier;
-            scoreDisplay.textContent = `Score: ${score}`;
-        });
-
-        // Multiplier Button Click (for future use if needed)
-        multiplierButton.addEventListener('click', () => {
-            alert(`Your current multiplier is x${multiplier}`);
+            score++;
+            scoreDisplay.textContent = score;
         });
     </script>
 </body>
