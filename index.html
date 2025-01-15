@@ -109,6 +109,25 @@
         .screen-content {
             margin-top: 20px;
         }
+        .upgrade-option {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #333;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #ffffff;
+        }
+        .upgrade-option button {
+            background-color: #00ff00;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Bungee', cursive;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
@@ -134,8 +153,18 @@
         <div id="improbe-screen">
             <h2>Improvements</h2>
             <div class="screen-content">
-                <button class="menu-button" onclick="upgradeClickPerHour()">Click per Hour</button>
-                <p id="upgrade-status">Current Level: 1</p>
+                <div class="upgrade-option">
+                    <span>Passive: +Clicks per Hour</span>
+                    <button onclick="upgradePassive()">Upgrade</button>
+                </div>
+                <div class="upgrade-option">
+                    <span>Click: +Points per Tap</span>
+                    <button onclick="upgradeClick()">Upgrade</button>
+                </div>
+                <div class="upgrade-option">
+                    <span>Extra Energy: +Energy per Referral</span>
+                    <button onclick="upgradeEnergy()">Upgrade</button>
+                </div>
             </div>
             <button class="menu-button" onclick="hideScreen('improbe-screen')">Back</button>
         </div>
@@ -151,12 +180,10 @@
         const energyCounter = document.getElementById('energy-counter');
         const scoreDisplay = document.getElementById('score');
         const referralLink = document.getElementById('referral-link');
-        const upgradeStatus = document.getElementById('upgrade-status');
 
         // Update score and energy display
         scoreDisplay.textContent = formatScore(score);
         updateEnergyBar();
-        updateUpgradeStatus();
 
         // Generate unique referral link using Telegram bot link
         const playerId = Math.random().toString(36).substr(2, 9);
@@ -180,22 +207,37 @@
             localStorage.setItem('energy', energy);
         }
 
-        function updateUpgradeStatus() {
-            upgradeStatus.textContent = `Current Level: ${clickPerHourLevel}`;
+        // Function to handle upgrades
+        function upgradePassive() {
+            if (score >= 100000) {
+                score -= 100000;
+                alert('Passive clicks per hour upgraded!');
+                updateEnergyBar();
+                scoreDisplay.textContent = formatScore(score);
+            } else {
+                alert('Not enough points to upgrade!');
+            }
         }
 
-        // Function to upgrade click per hour
-        function upgradeClickPerHour() {
-            if (score >= 100000 && clickPerHourLevel < 10) {
+        function upgradeClick() {
+            if (score >= 100000) {
                 score -= 100000;
-                clickPerHourLevel++;
-                localStorage.setItem('score', score);
-                localStorage.setItem('clickPerHourLevel', clickPerHourLevel);
+                tapScore++;
+                alert('Click points upgraded!');
+                updateEnergyBar();
                 scoreDisplay.textContent = formatScore(score);
-                updateUpgradeStatus();
-                alert('Click per Hour upgraded!');
-            } else if (clickPerHourLevel >= 10) {
-                alert('Maximum upgrade level reached!');
+            } else {
+                alert('Not enough points to upgrade!');
+            }
+        }
+
+        function upgradeEnergy() {
+            if (score >= 100000) {
+                score -= 100000;
+                energy += 100;
+                alert('Extra energy per referral upgraded!');
+                updateEnergyBar();
+                scoreDisplay.textContent = formatScore(score);
             } else {
                 alert('Not enough points to upgrade!');
             }
@@ -208,42 +250,6 @@
         function hideScreen(screenId) {
             document.getElementById(screenId).style.display = 'none';
         }
-
-        // Handle multi-touch taps with proper touch-action disabling
-        const coin = document.getElementById('coin');
-        coin.addEventListener('touchstart', (event) => {
-            event.preventDefault();
-            const touches = event.touches.length;
-            if (energy >= touches) {
-                score += tapScore * touches;
-                energy -= touches;
-                scoreDisplay.textContent = formatScore(score);
-                updateEnergyBar();
-                coin.style.transform = 'translate(-50%, -50%) scale(0.9)';
-                setTimeout(() => {
-                    coin.style.transform = 'translate(-50%, -50%) scale(1)';
-                }, 100);
-                localStorage.setItem('score', score);
-            } else {
-                alert('Not enough energy!');
-            }
-        });
-
-        coin.addEventListener('click', () => {
-            if (energy > 0) {
-                score += tapScore;
-                energy--;
-                scoreDisplay.textContent = formatScore(score);
-                updateEnergyBar();
-                coin.style.transform = 'translate(-50%, -50%) scale(0.9)';
-                setTimeout(() => {
-                    coin.style.transform = 'translate(-50%, -50%) scale(1)';
-                }, 100);
-                localStorage.setItem('score', score);
-            } else {
-                alert('Out of energy!');
-            }
-        });
     </script>
 </body>
 </html>
