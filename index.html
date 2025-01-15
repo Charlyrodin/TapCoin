@@ -41,7 +41,7 @@
         }
         #score {
             position: absolute;
-            top: 21%;
+            top: 65%;
             left: 50%;
             transform: translateX(-50%);
             font-size: 72px;
@@ -49,7 +49,7 @@
         }
         #menu {
             position: absolute;
-            bottom: 10px;
+            bottom: 50px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
@@ -96,9 +96,11 @@
             margin: 5px;
             border: 2px solid #ffffff;
             cursor: pointer;
+            display: none;
         }
         .active {
             background-color: #00ff00;
+            display: inline-block;
         }
     </style>
 </head>
@@ -118,7 +120,7 @@
 
     <script>
         let score = 0;
-        let tapScore = 1;
+        let tapScore = 500;
         const scoreDisplay = document.getElementById('score');
         const coin = document.getElementById('coin');
 
@@ -159,9 +161,9 @@
                 for (let i = 0; i < Math.pow(2, level - 1); i++) {
                     const avatar = document.createElement('div');
                     avatar.classList.add('avatar');
-                    avatar.addEventListener('click', () => {
-                        avatar.classList.toggle('active');
-                    });
+                    if (Math.random() < 0.1) { // Simulate active users
+                        avatar.classList.add('active');
+                    }
                     levelDiv.appendChild(avatar);
                 }
 
