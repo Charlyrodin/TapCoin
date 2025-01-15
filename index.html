@@ -52,13 +52,21 @@
             font-size: 24px;
             color: #00ff00;
         }
-        #multiplier {
+        #multiplier-button {
             position: absolute;
             bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 20px;
-            color: #ffcc00;
+            width: 150px;
+            height: 50px;
+            background-image: url('https://i.postimg.cc/K8D9Q05k/button.png');
+            background-size: cover;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            color: #fff;
+            text-align: center;
+            line-height: 50px;
         }
         #registration-form {
             position: absolute;
@@ -105,7 +113,7 @@
         <div id="matrix-info"></div>
         <div id="coin"></div>
         <div id="score">Score: 0</div>
-        <div id="multiplier">Multiplier: x1</div>
+        <button id="multiplier-button">Multiplier: x1</button>
     </div>
 
     <script>
@@ -148,21 +156,23 @@
                 users[referrer].referrals = [];
             }
             users[referrer].referrals.push(newUser);
+            multiplier++;
+            document.getElementById('multiplier-button').textContent = `Multiplier: x${multiplier}`;
         }
 
         // Coin Click Event
         const coin = document.getElementById('coin');
         const scoreDisplay = document.getElementById('score');
-        const multiplierDisplay = document.getElementById('multiplier');
+        const multiplierButton = document.getElementById('multiplier-button');
 
         coin.addEventListener('click', () => {
             score += multiplier;
             scoreDisplay.textContent = `Score: ${score}`;
+        });
 
-            if (Math.random() < 0.1) {
-                multiplier++;
-                multiplierDisplay.textContent = `Multiplier: x${multiplier}`;
-            }
+        // Multiplier Button Click (for future use if needed)
+        multiplierButton.addEventListener('click', () => {
+            alert(`Your current multiplier is x${multiplier}`);
         });
     </script>
 </body>
