@@ -207,7 +207,43 @@
             localStorage.setItem('energy', energy);
         }
 
-        // Function to handle upgrades
+        // Handle multi-touch taps with proper touch-action disabling
+        const coin = document.getElementById('coin');
+        coin.addEventListener('touchstart', (event) => {
+            event.preventDefault();
+            const touches = event.touches.length;
+            if (energy >= touches) {
+                score += tapScore * touches;
+                energy -= touches;
+                scoreDisplay.textContent = formatScore(score);
+                updateEnergyBar();
+                coin.style.transform = 'translate(-50%, -50%) scale(0.9)';
+                setTimeout(() => {
+                    coin.style.transform = 'translate(-50%, -50%) scale(1)';
+                }, 100);
+                localStorage.setItem('score', score);
+            } else {
+                alert('Not enough energy!');
+            }
+        });
+
+        coin.addEventListener('click', (event) => {
+            event.preventDefault();
+            if (energy > 0) {
+                score += tapScore;
+                energy--;
+                scoreDisplay.textContent = formatScore(score);
+                updateEnergyBar();
+                coin.style.transform = 'translate(-50%, -50%) scale(0.9)';
+                setTimeout(() => {
+                    coin.style.transform = 'translate(-50%, -50%) scale(1)';
+                }, 100);
+                localStorage.setItem('score', score);
+            } else {
+                alert('Out of energy!');
+            }
+        });
+
         function upgradePassive() {
             if (score >= 100000) {
                 score -= 100000;
