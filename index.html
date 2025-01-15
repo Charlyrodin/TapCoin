@@ -282,6 +282,28 @@
         function showScreen(screenId) {
             document.getElementById(screenId).style.display = 'block';
         }
+        
+        function showClickUpgradePopup() {
+            document.getElementById('click-upgrade-popup').style.display = 'flex';
+        }
+
+        function closePopup() {
+            document.getElementById('click-upgrade-popup').style.display = 'none';
+        }
+
+        function upgradeClick() {
+            if (score >= 100000) {
+                score -= 100000;
+                clickLevel++;
+                tapScore++;
+                localStorage.setItem('score', score);
+                localStorage.setItem('clickLevel', clickLevel);
+                updateClickLevel();
+                alert('Click level upgraded!');
+            } else {
+                alert('Not enough points to upgrade!');
+            }
+        }
 
         function hideScreen(screenId) {
             document.getElementById(screenId).style.display = 'none';
