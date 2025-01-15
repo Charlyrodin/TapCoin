@@ -1,10 +1,108 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Tap Coin Game</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
-  </head>
-  <body>
-    <script src="sketch.js"></script>
-  </body>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coin Tap Game</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #1a1a1a;
+            color: #fff;
+            font-family: 'Press Start 2P', cursive;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        #game-container {
+            position: relative;
+            width: 360px;
+            height: 640px;
+            background: #222;
+            border: 5px solid #00ff00;
+            border-radius: 20px;
+        }
+        #coin {
+            width: 80px;
+            height: 80px;
+            background-image: url('https://example.com/coin.png');
+            background-size: cover;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+            animation: spin 2s linear infinite;
+        }
+        @keyframes spin {
+            from {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+            to {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
+        }
+        #score {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 24px;
+            color: #00ff00;
+        }
+        #multiplier {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 20px;
+            color: #ffcc00;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <div id="coin"></div>
+        <div id="score">Score: 0</div>
+        <div id="multiplier">Multiplier: x1</div>
+    </div>
+
+    <script>
+        let score = 0;
+        let multiplier = 1;
+        const coin = document.getElementById('coin');
+        const scoreDisplay = document.getElementById('score');
+        const multiplierDisplay = document.getElementById('multiplier');
+
+        // Sound Effects
+        const clickSound = new Audio('https://example.com/click.mp3');
+        const bonusSound = new Audio('https://example.com/bonus.mp3');
+
+        // Coin Click Event
+        coin.addEventListener('click', () => {
+            clickSound.play();
+            score += multiplier;
+            scoreDisplay.textContent = `Score: ${score}`;
+
+            // Random Bonus
+            if (Math.random() < 0.1) {
+                multiplier++;
+                bonusSound.play();
+                multiplierDisplay.textContent = `Multiplier: x${multiplier}`;
+            }
+        });
+
+        // Vibration on Tap (Mobile Only)
+        function vibrate() {
+            if (navigator.vibrate) {
+                navigator.vibrate(100);
+            }
+        }
+        coin.addEventListener('click', vibrate);
+    </script>
+</body>
 </html>
