@@ -92,7 +92,7 @@
             font-size: 14px;
             cursor: pointer;
         }
-        #mlm-screen, #improbe-screen {
+        #mlm-screen {
             display: none;
             position: fixed;
             top: 0;
@@ -121,7 +121,6 @@
         <div id="energy-counter">2400 / 2400 taps</div>
         <div id="menu">
             <button class="menu-button" onclick="showScreen('mlm-screen')">MLM</button>
-            <button class="menu-button" onclick="showScreen('improbe-screen')">Improbe</button>
         </div>
         <div id="mlm-screen">
             <h2>MLM Network</h2>
@@ -131,21 +130,12 @@
             </div>
             <button class="menu-button" onclick="hideScreen('mlm-screen')">Back</button>
         </div>
-        <div id="improbe-screen">
-            <h2>Improvements</h2>
-            <div class="screen-content">
-                <button class="menu-button" onclick="upgradeClickPerHour()">Click per Hour</button>
-                <p id="upgrade-status">Current Level: 1</p>
-            </div>
-            <button class="menu-button" onclick="hideScreen('improbe-screen')">Back</button>
-        </div>
     </div>
 
     <script>
         let score = parseInt(localStorage.getItem('score')) || 0;
         let tapScore = 1;
         let energy = parseInt(localStorage.getItem('energy')) || 2400;
-        let clickPerHourLevel = parseInt(localStorage.getItem('clickPerHourLevel')) || 1;
         const maxEnergy = 2400;
         const energyBar = document.getElementById('energy-progress');
         const energyCounter = document.getElementById('energy-counter');
@@ -156,7 +146,6 @@
         // Update score and energy display
         scoreDisplay.textContent = formatScore(score);
         updateEnergyBar();
-        updateUpgradeStatus();
 
         // Generate unique referral link using Telegram bot link
         const playerId = Math.random().toString(36).substr(2, 9);
@@ -178,25 +167,6 @@
             energyBar.style.width = `${energyPercentage}%`;
             energyCounter.textContent = `${energy} / ${maxEnergy} taps`;
             localStorage.setItem('energy', energy);
-           }
-
-        function updateUpgradeStatus() {
-            upgradeStatus.textContent = `Current Level: ${clickPerHourLevel}`;
-        }
-
-        // Function to upgrade click per hour
-        function upgradeClickPerHour() {
-            if (score >= 100000) {
-                score -= 100000;
-                clickPerHourLevel++;
-                localStorage.setItem('score', score);
-                localStorage.setItem('clickPerHourLevel', clickPerHourLevel);
-                scoreDisplay.textContent = formatScore(score);
-                updateUpgradeStatus();
-                alert('Click per Hour upgraded!');
-            } else {
-                alert('Not enough points to upgrade!');
-            }
         }
 
         // Function to recharge energy every hour
