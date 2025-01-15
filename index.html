@@ -41,7 +41,7 @@
         }
         #score {
             position: absolute;
-            top: 65%;
+            top: 20%;
             left: 50%;
             transform: translateX(-50%);
             font-size: 72px;
@@ -83,25 +83,6 @@
         .screen-content {
             margin-top: 20px;
         }
-        .level {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 10px;
-        }
-        .avatar {
-            width: 40px;
-            height: 40px;
-            background-color: #444;
-            border-radius: 50%;
-            margin: 5px;
-            border: 2px solid #ffffff;
-            cursor: pointer;
-            display: none;
-        }
-        .active {
-            background-color: #00ff00;
-            display: inline-block;
-        }
     </style>
 </head>
 <body>
@@ -113,16 +94,33 @@
         </div>
         <div id="mlm-screen">
             <h2>MLM Network</h2>
-            <div class="screen-content" id="mlm-structure"></div>
+            <div class="screen-content" id="mlm-content">
+                <p>Share your unique referral link to invite new players!</p>
+                <p id="referral-link"></p>
+            </div>
             <button class="menu-button" onclick="hideScreen('mlm-screen')">Back</button>
         </div>
     </div>
 
     <script>
-        let score = 0;
-        let tapScore = 500;
+        let score = parseInt(localStorage.getItem('score')) || 0;
+        let tapScore = 1;
         const scoreDisplay = document.getElementById('score');
         const coin = document.getElementById('coin');
+        const referralLink = document.getElementById('referral-link');
+
+        // Update score display
+        scoreDisplay.textContent = formatScore(score);
+
+        // Generate unique referral link
+        const playerId = Math.random().toString(36).substr(2, 9);
+        const link = `https://example.com/join?ref=${playerId}`;
+        referralLink.textContent = link;
+        referralLink.style.cursor = 'pointer';
+        referralLink.onclick = () => {
+            navigator.clipboard.writeText(link);
+            alert('Referral link copied to clipboard!');
+        };
 
         // Function to format numbers with thousands separator
         function formatScore(number) {
@@ -132,6 +130,7 @@
         coin.addEventListener('click', () => {
             score += tapScore;
             scoreDisplay.textContent = formatScore(score);
+            localStorage.setItem('score', score);
             coin.style.transform = 'translate(-50%, -50%) scale(0.9)';
             setTimeout(() => {
                 coin.style.transform = 'translate(-50%, -50%) scale(1)';
@@ -140,36 +139,26 @@
 
         function showScreen(screenId) {
             document.getElementById(screenId).style.display = 'block';
-            if (screenId === 'mlm-screen') {
-                renderMLMStructure();
-            }
         }
 
         function hideScreen(screenId) {
             document.getElementById(screenId).style.display = 'none';
         }
 
-        // Function to render MLM structure
-        function renderMLMStructure() {
-            const structure = document.getElementById('mlm-structure');
-            structure.innerHTML = '';
-
-            for (let level = 1; level <= 20; level++) {
-                const levelDiv = document.createElement('div');
-                levelDiv.classList.add('level');
-
-                for (let i = 0; i < Math.pow(2, level - 1); i++) {
-                    const avatar = document.createElement('div');
-                    avatar.classList.add('avatar');
-                    if (Math.random() < 0.1) { // Simulate active users
-                        avatar.classList.add('active');
-                    }
-                    levelDiv.appendChild(avatar);
-                }
-
-                structure.appendChild(levelDiv);
+        // Function to handle new referrals
+        function handleReferral(ref) {
+            if (ref) {
+                score += 100000;
+                scoreDisplay.textContent = formatScore(score);
+                localStorage.setItem('score', score);
+                alert('New referral! You earned 100,000 points!');
             }
         }
+
+        // Check for referral parameter in URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const ref = urlParams.get('ref');
+        handleReferral(ref);
     </script>
 </body>
 </html>
