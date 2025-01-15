@@ -12,7 +12,7 @@
             background-image: url('https://i.postimg.cc/wvFPjgvk/Fondo-pantalla-juego.png');
             background-size: cover;
             background-position: center;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Bungee', cursive;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -41,7 +41,7 @@
         }
         #score {
             position: absolute;
-            top: 22%;
+            top: 20%;
             left: 50%;
             transform: translateX(-50%);
             font-size: 72px;
@@ -60,9 +60,14 @@
         const scoreDisplay = document.getElementById('score');
         const coin = document.getElementById('coin');
 
+        // Function to format numbers with thousands separator
+        function formatScore(number) {
+            return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+
         coin.addEventListener('click', () => {
-            score+= 500;
-            scoreDisplay.textContent = score;
+            score += 999;
+            scoreDisplay.textContent = formatScore(score);
             coin.style.transform = 'translate(-50%, -50%) scale(0.9)';
             setTimeout(() => {
                 coin.style.transform = 'translate(-50%, -50%) scale(1)';
