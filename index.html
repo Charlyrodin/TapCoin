@@ -112,9 +112,9 @@
         // Update score display
         scoreDisplay.textContent = formatScore(score);
 
-        // Generate unique referral link
+        // Generate unique referral link using Telegram bot link
         const playerId = Math.random().toString(36).substr(2, 9);
-        const link = `https://tap-coin-eight.vercel.app/?ref=${playerId}`;
+        const link = `https://t.me/EmeraldMineCoinBot?start=${playerId}`;
         referralLink.textContent = link;
         referralLink.style.cursor = 'pointer';
         referralLink.onclick = () => {
