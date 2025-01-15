@@ -9,7 +9,9 @@
         body {
             margin: 0;
             padding: 0;
-            background-color: #1a1a1a;
+            background-image: url('https://i.postimg.cc/bwhCQ71f/background.jpg');
+            background-size: cover;
+            background-position: center;
             color: #fff;
             font-family: 'Press Start 2P', cursive;
             display: flex;
@@ -22,14 +24,14 @@
             position: relative;
             width: 360px;
             height: 640px;
-            background: #222;
+            background: rgba(34, 34, 34, 0.8);
             border: 5px solid #00ff00;
             border-radius: 20px;
         }
         #coin {
             width: 80px;
             height: 80px;
-            background-image: url('https://example.com/coin.png');
+            background-image: url('https://i.postimg.cc/kMLh5644/coin.png');
             background-size: cover;
             position: absolute;
             top: 50%;
@@ -62,6 +64,18 @@
             font-size: 20px;
             color: #ffcc00;
         }
+        #tap-button {
+            width: 100px;
+            height: 40px;
+            background-image: url('https://i.postimg.cc/K8D9Q05k/button.png');
+            background-size: cover;
+            border: none;
+            position: absolute;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -69,6 +83,7 @@
         <div id="coin"></div>
         <div id="score">Score: 0</div>
         <div id="multiplier">Multiplier: x1</div>
+        <button id="tap-button"></button>
     </div>
 
     <script>
@@ -77,6 +92,7 @@
         const coin = document.getElementById('coin');
         const scoreDisplay = document.getElementById('score');
         const multiplierDisplay = document.getElementById('multiplier');
+        const tapButton = document.getElementById('tap-button');
 
         // Sound Effects
         const clickSound = new Audio('https://example.com/click.mp3');
@@ -94,6 +110,13 @@
                 bonusSound.play();
                 multiplierDisplay.textContent = `Multiplier: x${multiplier}`;
             }
+        });
+
+        // Button Tap Event
+        tapButton.addEventListener('click', () => {
+            clickSound.play();
+            score += multiplier;
+            scoreDisplay.textContent = `Score: ${score}`;
         });
 
         // Vibration on Tap (Mobile Only)
