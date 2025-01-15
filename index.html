@@ -47,12 +47,55 @@
             font-size: 72px;
             color: #ffffff;
         }
+        #menu {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+        }
+        .menu-button {
+            width: 100px;
+            height: 40px;
+            background-color: #00ff00;
+            border: none;
+            border-radius: 10px;
+            color: #000;
+            font-family: 'Bungee', cursive;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        #upgrade-screen, #shop-screen {
+            display: none;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #ffffff;
+            text-align: center;
+            padding: 20px;
+        }
     </style>
 </head>
 <body>
     <div id="game-container">
         <div id="score">0</div>
         <div id="coin"></div>
+        <div id="menu">
+            <button class="menu-button" onclick="showScreen('upgrade-screen')">Upgrades</button>
+            <button class="menu-button" onclick="showScreen('shop-screen')">Shop</button>
+        </div>
+        <div id="upgrade-screen">
+            <h2>Upgrades</h2>
+            <p>Coming soon...</p>
+            <button class="menu-button" onclick="hideScreen('upgrade-screen')">Back</button>
+        </div>
+        <div id="shop-screen">
+            <h2>Shop</h2>
+            <p>Coming soon...</p>
+            <button class="menu-button" onclick="hideScreen('shop-screen')">Back</button>
+        </div>
     </div>
 
     <script>
@@ -66,13 +109,21 @@
         }
 
         coin.addEventListener('click', () => {
-            score += 999;
+            score +=;
             scoreDisplay.textContent = formatScore(score);
             coin.style.transform = 'translate(-50%, -50%) scale(0.9)';
             setTimeout(() => {
                 coin.style.transform = 'translate(-50%, -50%) scale(1)';
             }, 100);
         });
+
+        function showScreen(screenId) {
+            document.getElementById(screenId).style.display = 'block';
+        }
+
+        function hideScreen(screenId) {
+            document.getElementById(screenId).style.display = 'none';
+        }
     </script>
 </body>
 </html>
