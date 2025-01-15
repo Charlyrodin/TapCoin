@@ -4,9 +4,9 @@ let buttonX, buttonY, buttonSize; // Posición y tamaño del botón
 
 function preload() {
   // Cargar imágenes desde los enlaces proporcionados
-  coinImg = loadImage("https://i.imgur.com/XxkKJVo.png");
-  buttonImg = loadImage("https://i.imgur.com/jV3gqZN.png");
-  backgroundImg = loadImage("https://i.imgur.com/jV3gqZN.png");
+  coinImg = loadImage("https://i.postimg.cc/kMLh5644/coin.png");
+  buttonImg = loadImage("https://i.postimg.cc/bwhCQ71f/background.jpg");
+  backgroundImg = loadImage("https://i.postimg.cc/bwhCQ71f/background.jpg");
 }
 
 function setup() {
