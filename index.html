@@ -150,8 +150,8 @@
         const energyBar = document.getElementById('energy-progress');
         const energyCounter = document.getElementById('energy-counter');
         const scoreDisplay = document.getElementById('score');
+        const coin = document.getElementById('coin');
         const referralLink = document.getElementById('referral-link');
-        const upgradeStatus = document.getElementById('upgrade-status');
 
         // Update score and energy display
         scoreDisplay.textContent = formatScore(score);
@@ -178,7 +178,7 @@
             energyBar.style.width = `${energyPercentage}%`;
             energyCounter.textContent = `${energy} / ${maxEnergy} taps`;
             localStorage.setItem('energy', energy);
-        }
+           }
 
         function updateUpgradeStatus() {
             upgradeStatus.textContent = `Current Level: ${clickPerHourLevel}`;
@@ -199,6 +199,50 @@
             }
         }
 
+        // Function to recharge energy every hour
+        setInterval(() => {
+            if (energy < maxEnergy) {
+                energy += 100;
+                if (energy > maxEnergy) energy = maxEnergy;
+                updateEnergyBar();
+            }
+        }, 3600000); // Recharge 100 taps every hour
+
+        // Handle multi-touch taps with proper touch-action disabling
+        coin.addEventListener('touchstart', (event) => {
+            event.preventDefault();
+            const touches = event.touches.length;
+            if (energy >= touches) {
+                score += tapScore * touches;
+                energy -= touches;
+                scoreDisplay.textContent = formatScore(score);
+                updateEnergyBar();
+                coin.style.transform = 'translate(-50%, -50%) scale(0.9)';
+                setTimeout(() => {
+                    coin.style.transform = 'translate(-50%, -50%) scale(1)';
+                }, 100);
+                localStorage.setItem('score', score);
+            } else {
+                alert('Not enough energy!');
+            }
+        });
+
+        coin.addEventListener('click', () => {
+            if (energy > 0) {
+                score += tapScore;
+                energy--;
+                scoreDisplay.textContent = formatScore(score);
+                updateEnergyBar();
+                coin.style.transform = 'translate(-50%, -50%) scale(0.9)';
+                setTimeout(() => {
+                    coin.style.transform = 'translate(-50%, -50%) scale(1)';
+                }, 100);
+                localStorage.setItem('score', score);
+            } else {
+                alert('Out of energy!');
+            }
+        });
+
         function showScreen(screenId) {
             document.getElementById(screenId).style.display = 'block';
         }
@@ -206,6 +250,21 @@
         function hideScreen(screenId) {
             document.getElementById(screenId).style.display = 'none';
         }
+
+        // Function to handle new referrals
+        function handleReferral(ref) {
+            if (ref) {
+                score += 100000;
+                scoreDisplay.textContent = formatScore(score);
+                localStorage.setItem('score', score);
+                alert('New referral! You earned 100,000 points!');
+            }
+        }
+
+        // Check for referral parameter in URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const ref = urlParams.get('ref');
+        handleReferral(ref);
     </script>
 </body>
 </html>
