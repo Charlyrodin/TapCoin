@@ -47,6 +47,22 @@
             font-size: 72px;
             color: #ffffff;
         }
+        #energy-bar {
+            position: absolute;
+            top: 70%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            height: 20px;
+            background-color: #333;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        #energy-progress {
+            height: 100%;
+            background-color: #00ff00;
+            width: 0;
+        }
         #menu {
             position: absolute;
             bottom: 50px;
@@ -89,6 +105,9 @@
     <div id="game-container">
         <div id="score">0</div>
         <div id="coin"></div>
+        <div id="energy-bar">
+            <div id="energy-progress"></div>
+        </div>
         <div id="menu">
             <button class="menu-button" onclick="showScreen('mlm-screen')">MLM</button>
         </div>
@@ -105,12 +124,16 @@
     <script>
         let score = parseInt(localStorage.getItem('score')) || 0;
         let tapScore = 1;
+        let energy = parseInt(localStorage.getItem('energy')) || 2400;
+        const maxEnergy = 2400;
+        const energyBar = document.getElementById('energy-progress');
         const scoreDisplay = document.getElementById('score');
         const coin = document.getElementById('coin');
         const referralLink = document.getElementById('referral-link');
 
-        // Update score display
+        // Update score and energy display
         scoreDisplay.textContent = formatScore(score);
+        updateEnergyBar();
 
         // Generate unique referral link using Telegram bot link
         const playerId = Math.random().toString(36).substr(2, 9);
@@ -127,14 +150,35 @@
             return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
         }
 
+        function updateEnergyBar() {
+            const energyPercentage = (energy / maxEnergy) * 100;
+            energyBar.style.width = `${energyPercentage}%`;
+            localStorage.setItem('energy', energy);
+        }
+
+        // Function to recharge energy every hour
+        setInterval(() => {
+            if (energy < maxEnergy) {
+                energy += 100;
+                if (energy > maxEnergy) energy = maxEnergy;
+                updateEnergyBar();
+            }
+        }, 3600000); // Recharge 100 taps every hour
+
         coin.addEventListener('click', () => {
-            score += tapScore;
-            scoreDisplay.textContent = formatScore(score);
-            localStorage.setItem('score', score);
-            coin.style.transform = 'translate(-50%, -50%) scale(0.9)';
-            setTimeout(() => {
-                coin.style.transform = 'translate(-50%, -50%) scale(1)';
-            }, 100);
+            if (energy > 0) {
+                score += tapScore;
+                energy--;
+                scoreDisplay.textContent = formatScore(score);
+                updateEnergyBar();
+                localStorage.setItem('score', score);
+                coin.style.transform = 'translate(-50%, -50%) scale(0.9)';
+                setTimeout(() => {
+                    coin.style.transform = 'translate(-50%, -50%) scale(1)';
+                }, 100);
+            } else {
+                alert('Out of energy! Wait for it to recharge.');
+            }
         });
 
         function showScreen(screenId) {
