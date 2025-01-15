@@ -177,19 +177,21 @@
             }
         }, 3600000); // Recharge 100 taps every hour
 
-        coin.addEventListener('click', () => {
-            if (energy > 0) {
-                score += tapScore;
-                energy--;
+        // Handle multi-touch taps
+        coin.addEventListener('touchstart', (event) => {
+            const touches = event.touches.length;
+            if (energy >= touches) {
+                score += tapScore * touches;
+                energy -= touches;
                 scoreDisplay.textContent = formatScore(score);
                 updateEnergyBar();
-                localStorage.setItem('score', score);
                 coin.style.transform = 'translate(-50%, -50%) scale(0.9)';
                 setTimeout(() => {
                     coin.style.transform = 'translate(-50%, -50%) scale(1)';
                 }, 100);
+                localStorage.setItem('score', score);
             } else {
-                alert('Out of energy! Wait for it to recharge.');
+                alert('Not enough energy!');
             }
         });
 
